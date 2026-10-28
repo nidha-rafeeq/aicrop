@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriVision AI | Crop Disease Diagnosis</title>
+  <!-- Tailwind CSS & Inter Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col justify-between">
+
+  <!-- Navigation Bar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg shadow-sm">
+          <i class="fa-solid fa-seedling"></i>
+        </span>
+        <div>
+          <h1 class="text-base font-bold text-slate-900 leading-tight">AgriVision AI</h1>
+          <p class="text-xs text-slate-500">Automated Plant Pathology & Management</p>
+        </div>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 text-xs font-medium text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        MobileNetV2 Engine Active
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 py-10 w-full flex-grow">
+    <!-- Hero Title -->
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">AI Agricultural Assistant</span>
+      <h2 class="text-3xl font-extrabold text-slate-900 mt-3 sm:text-4xl tracking-tight">Leaf Disease Detection</h2>
+      <p class="text-slate-600 text-sm sm:text-base mt-2">
+        Upload or capture a leaf photo to diagnose crop pathology and generate actionable organic, chemical, and preventive remedies.
+      </p>
+    </div>
+
+    <!-- Error Alert (Flask flash/error message) -->
+    {% if error %}
+    <div class="max-w-xl mx-auto mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center gap-3 text-rose-700 text-sm">
+      <i class="fa-solid fa-triangle-exclamation text-base"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Upload Card -->
+    <div class="max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+      <form action="/predict" method="POST" enctype="multipart/form-data" id="upload-form" class="space-y-6">
+        
+        <!-- Drag & Drop Container -->
+        <div id="drop-zone" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 transition-colors rounded-xl p-6 text-center cursor-pointer bg-slate-50/60 relative group">
+          <input type="file" name="image" id="file-input" accept="image/png, image/jpeg, image/jpg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
+          
+          <!-- Default State -->
+          <div id="upload-prompt" class="space-y-3">
+            <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl group-hover:scale-105 transition-transform">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-slate-700">Click to upload or drag & drop</p>
+              <p class="text-xs text-slate-400 mt-1">PNG, JPG or JPEG (Max 10MB)</p>
+            </div>
+            <div class="pt-2">
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-2xs">
+                <i class="fa-solid fa-camera"></i> Camera Capture Supported
+              </span>
+            </div>
+          </div>
+
+          <!-- Preview State -->
+          <div id="preview-wrapper" class="hidden flex-col items-center">
+            <img id="image-preview" src="#" alt="Preview" class="max-h-56 rounded-lg object-contain shadow-sm border border-slate-200 mb-3">
+            <p id="filename-display" class="text-xs font-medium text-slate-600 truncate max-w-xs"></p>
+            <span class="text-xs text-emerald-600 underline mt-1">Click or drop another to change</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium py-3 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Run Diagnosis</span>
+        </button>
+
+        <!-- Loading Indicator (Hidden initially) -->
+        <div id="loading-spinner" class="hidden text-center py-2 space-y-2">
+          <div class="inline-block animate-spin rounded-full h-6 w-6 border-2 border-emerald-600 border-t-transparent"></div>
+          <p class="text-xs font-medium text-slate-500">Processing image through CNN layers...</p>
+        </div>
+      </form>
+
+      <!-- Practical Hints -->
+      <div class="mt-6 pt-5 border-t border-slate-100 flex items-start gap-2.5 text-xs text-slate-500">
+        <i class="fa-regular fa-lightbulb text-amber-500 mt-0.5"></i>
+        <span><strong>Tip for best accuracy:</strong> Photograph a single leaf against a uniform, neutral background under bright lighting.</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+    <p>AI-Powered Plant Pathology Diagnostic System &bull; Final Year Academic Project</p>
+  </footer>
+
+  <!-- Script for preview and submission feedback -->
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const uploadPrompt = document.getElementById('upload-prompt');
+    const previewWrapper = document.getElementById('preview-wrapper');
+    const imagePreview = document.getElementById('image-preview');
+    const filenameDisplay = document.getElementById('filename-display');
+    const form = document.getElementById('upload-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          imagePreview.src = evt.target.result;
+          filenameDisplay.textContent = file.name;
+          uploadPrompt.classList.add('hidden');
+          previewWrapper.classList.remove('hidden');
+          previewWrapper.classList.add('flex');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    form.addEventListener('submit', function() {
+      submitBtn.classList.add('hidden');
+      loadingSpinner.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>

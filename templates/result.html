@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnosis Report | AgriVision AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg shadow-sm hover:bg-emerald-700 transition">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div>
+          <h1 class="text-base font-bold text-slate-900 leading-tight">Diagnostic Summary</h1>
+          <p class="text-xs text-slate-500">Classification & Treatment Prescriptions</p>
+        </div>
+      </div>
+      <a href="/" class="text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition">
+        Analyze Another Leaf
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow">
+    
+    <!-- Low Confidence Notification Banner -->
+    {% if low_confidence %}
+    <div class="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-amber-800 text-sm">
+      <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5 text-base"></i>
+      <div>
+        <p class="font-semibold">Low Prediction Confidence (&lt; 60%)</p>
+        <p class="text-xs mt-0.5">The neural network confidence score is lower than normal. Check if the image has adequate lighting, focuses on one leaf, and is clear of background clutter.</p>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Left Column: Input Image & Prediction Card -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Sample Leaf</span>
+            <span class="text-xs text-slate-400">Input Photo</span>
+          </div>
+          <div class="bg-slate-100 flex items-center justify-center p-4">
+            <img src="{{ image }}" alt="Uploaded Leaf" class="rounded-xl max-h-72 w-full object-contain shadow-xs">
+          </div>
+          <div class="p-5 space-y-4">
+            <div>
+              <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Identified Classification</span>
+              <div class="flex items-center justify-between mt-1">
+                <h3 class="text-xl font-bold text-slate-900">{{ disease }}</h3>
+                {% if healthy %}
+                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-check"></i> Healthy
+                  </span>
+                {% else %}
+                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-700 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-exclamation"></i> Condition Detected
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Confidence Meter -->
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1">
+                <span class="text-slate-600">Model Confidence</span>
+                <span class="font-bold text-slate-800">{{ confidence }}%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                <div class="h-2.5 rounded-full {% if healthy %}bg-emerald-500{% elif low_confidence %}bg-amber-500{% else %}bg-indigo-600{% endif %}" style="width: {{ confidence }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Advisory & Treatments -->
+      <div class="lg:col-span-7 space-y-4">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold text-slate-900">Recommended Measures</h2>
+          <span class="text-xs text-slate-400">Integrated Pest Management</span>
+        </div>
+
+        {% if healthy %}
+        <!-- Healthy Crop Status Card -->
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-emerald-900 space-y-3">
+          <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 text-xl">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <h3 class="text-lg font-bold text-emerald-800">No Action Required</h3>
+          <p class="text-sm text-emerald-700 leading-relaxed">
+            The sample exhibits characteristics of healthy plant tissue. Continue standard irrigation, nutrient scheduling, and periodic scouting to maintain crop health.
+          </p>
+        </div>
+        {% endif %}
+
+        <!-- Organic Control -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-leaf"></i>
+            </span>
+            <h4 class="font-semibold text-slate-900 text-sm">Organic & Biological Control</h4>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed pl-10">
+            {{ advice.organic }}
+          </p>
+        </div>
+
+        <!-- Chemical Treatment -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-flask"></i>
+            </span>
+            <h4 class="font-semibold text-slate-900 text-sm">Chemical Control</h4>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed pl-10">
+            {{ advice.chemical }}
+          </p>
+        </div>
+
+        <!-- Prevention & Cultural Practices -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-shield-halved"></i>
+            </span>
+            <h4 class="font-semibold text-slate-900 text-sm">Preventive Cultural Measures</h4>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed pl-10">
+            {{ advice.prevention }}
+          </p>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="text-xs text-slate-400 italic pt-2">
+          * Note: Chemical recommendations serve as guidelines. Always cross-check formulation quantities with local agricultural extension officers before application.
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+    <p>AI-Powered Plant Pathology Diagnostic System &bull; Final Year Academic Project</p>
+  </footer>
+
+</body>
+</html>

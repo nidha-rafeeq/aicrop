@@ -1,0 +1,62 @@
+{
+  "Pepper Bell Bacterial Spot": {
+    "organic": "Remove infected leaves; spray neem oil or a copper-based organic spray.",
+    "chemical": "Copper oxychloride as per label.",
+    "prevention": "Use disease-free seeds, rotate crops, avoid working in wet fields."
+  },
+  "Potato Early Blight": {
+    "organic": "Remove infected leaves; spray neem oil or compost tea.",
+    "chemical": "Mancozeb or chlorothalonil as per label.",
+    "prevention": "Rotate crops, give proper spacing, avoid overhead watering."
+  },
+  "Potato Late Blight": {
+    "organic": "Remove and destroy infected plants; spray Bordeaux mixture.",
+    "chemical": "Metalaxyl + mancozeb as per label.",
+    "prevention": "Plant resistant varieties, ensure good drainage, avoid wet foliage."
+  },
+  "Tomato Bacterial Spot": {
+    "organic": "Remove infected leaves; spray copper-based organic spray.",
+    "chemical": "Copper oxychloride as per label.",
+    "prevention": "Use healthy seeds, rotate crops, avoid overhead watering."
+  },
+  "Tomato Early Blight": {
+    "organic": "Remove infected lower leaves; spray neem oil.",
+    "chemical": "Mancozeb or chlorothalonil as per label.",
+    "prevention": "Rotate crops, mulch the soil, space plants well."
+  },
+  "Tomato Late Blight": {
+    "organic": "Remove and destroy infected plants; spray Bordeaux mixture.",
+    "chemical": "Metalaxyl + mancozeb as per label.",
+    "prevention": "Avoid wet leaves, improve air flow, use resistant varieties."
+  },
+  "Tomato Leaf Mold": {
+    "organic": "Remove infected leaves; improve ventilation; spray neem oil.",
+    "chemical": "Chlorothalonil as per label.",
+    "prevention": "Reduce humidity, avoid overhead watering, prune for air flow."
+  },
+  "Tomato Septoria Leaf Spot": {
+    "organic": "Remove spotted leaves; spray neem oil or copper spray.",
+    "chemical": "Chlorothalonil or mancozeb as per label.",
+    "prevention": "Rotate crops, mulch, water at the base of the plant."
+  },
+  "Tomato Spider Mites Two Spotted Spider Mite": {
+    "organic": "Spray neem oil or soap water on the underside of leaves.",
+    "chemical": "Use a miticide recommended by your agricultural officer.",
+    "prevention": "Keep plants well watered, avoid dusty conditions, check leaf undersides often."
+  },
+  "Tomato Target Spot": {
+    "organic": "Remove infected leaves; spray neem oil.",
+    "chemical": "Chlorothalonil or mancozeb as per label.",
+    "prevention": "Space plants, avoid overhead watering, clear crop residue."
+  },
+  "Tomato Tomato Yellow Leaf Curl Virus": {
+    "organic": "Remove infected plants; control whiteflies with yellow sticky traps and neem oil.",
+    "chemical": "Use a whitefly insecticide recommended locally (the virus itself cannot be cured).",
+    "prevention": "Use virus-resistant varieties, use insect nets in nurseries, control weeds."
+  },
+  "Tomato Tomato Mosaic Virus": {
+    "organic": "Remove and destroy infected plants; wash hands and tools.",
+    "chemical": "No chemical cure; control insects that spread it.",
+    "prevention": "Use certified seeds, disinfect tools, avoid tobacco contact before handling plants."
+  }
+}
